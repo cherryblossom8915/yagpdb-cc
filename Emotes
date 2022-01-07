@@ -1,0 +1,367 @@
+{{ $action := (index .Args 1) }}
+
+{{ $user := "" }}
+
+{{ if eq (len .Args) 3 }}
+
+	{{ $user = (userArg (index .Args 2)) }}
+
+{{ else if eq (len .Args) 2 }}
+
+	{{ $user = "" }}
+
+{{ else }}
+
+	{{ sendMessage nil "Wrong number of arguments!" }}
+
+{{ end }}
+
+{{ $embed := "" }}
+
+{{ $description := "" }}
+
+{{ $avatar := .User.AvatarURL "256" }}
+
+{{ $image := "https://media.discordapp.net/attachments/893503012864159884/" }}
+
+{{ $random := (randInt 10) }}
+
+{{ $author := "" }}
+
+ 
+
+{{ if eq $action "hug" }}
+
+	{{ if eq $random 0 }}
+
+		{{ $image = (joinStr "" $image "914805974202740786/hug_1.gif") }}
+
+	{{ else if eq $random 1 }}
+
+		{{ $image = (joinStr "" $image "914805974659899472/hug_2.gif") }}
+
+	{{ else if eq $random 2 }}
+
+		{{ $image = (joinStr "" $image "914808469696163861/hug_3.gif") }}
+
+	{{ else if eq $random 3 }}
+
+		{{ $image = (joinStr "" $image "914808470002356264/hug_4.gif") }}
+
+	{{ else if eq $random 4 }}
+
+		{{ $image = (joinStr "" $image "914808470241427456/hug_5.gif") }}
+
+	{{ else if eq $random 5 }}
+
+		{{ $image = (joinStr "" $image "914808470551793704/hug_6.gif") }}
+
+	{{ else if eq $random 6 }}
+
+		{{ $image = (joinStr "" $image "914808538285608960/hug_7.gif") }}
+
+	{{ else if eq $random 7 }}
+
+		{{ $image = (joinStr "" $image "914808538604392488/hug_8.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "914808539116077076/hug_9.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " hugs " $user.Username "!! Don't squeeze too hard!") }}
+
+{{ else if eq $action "cuddle" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "914822602164404255/cuddle_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "914822602416082954/cuddle_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "914822602671927366/cuddle_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "914822603082973214/cuddle_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "914822603443699722/cuddle_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " cuddles " $user.Username "! Adorable (>~<)") }}
+
+{{ else if eq $action "bite" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "914845003019329566/bite_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "914845003518464000/bite_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "914845003895943178/bite_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "914845004294389761/bite_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "914845004667686932/bite_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " gives " $user.Username " a bite! Yumm!! (>៱<)") }}
+
+{{ else if eq $action "nom" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "914848484182622208/nom_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "914848484543324160/nom_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "914848484916621332/nom_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "914848485285724200/nom_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "914848485646401536/nom_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " noms on " $user.Username "! (>//<)") }}
+
+{{ else if eq $action "lick" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "915003262854373456/lick_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "915003263189921862/lick_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "915003263605166110/lick_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "915003263831666768/lick_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "915003264083312690/lick_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " licks " $user.Username "! How does it taste?! (>ဂ<)") }}
+
+{{ else if eq $action "pat" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "915008439388880976/pat_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "915008439627952128/pat_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "915008440131256381/pat_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "915008440533917747/pat_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "915008440915619900/pat_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " pets " $user.Username "! There there! (>//<)") }}
+
+{{ else if eq $action "poke" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "915014816983302165/poke_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "915014817989922886/poke_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "915014818535178320/poke_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "915014818774265947/poke_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "915014819030110258/poke_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " pokes " $user.Username "! (~៱~)") }}
+
+{{ else if eq $action "hold" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "915023411766505482/hold_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "915023412177567814/hold_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "915023412483735632/hold_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "915023413037391942/hold_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "915023413561688126/hold_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " picks up " $user.Username "! (>//<)") }}
+
+{{ else if eq $action "boop" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "915027245872054342/boop_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "915027246341840936/boop_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "915027246794817556/boop_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "915027273931948042/boop_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "915027274481410058/boop_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " boops " $user.Username " on the nose! (>៱<)") }}
+
+{{ else if eq $action "pout" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "914993814677102592/pout_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "914993815062986843/pout_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "914993815331430430/pout_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "914993815683747930/pout_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "914993816078008340/pout_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " pouts >:c") }}
+
+{{ else if eq $action "cry" }}
+
+	{{ if or (eq $random 0) (eq $random 5) }}
+
+		{{ $image = (joinStr "" $image "914997229050269786/cry_1.gif") }}
+
+	{{ else if or (eq $random 1) (eq $random 6) }}
+
+		{{ $image = (joinStr "" $image "914997229570392124/cry_2.gif") }}
+
+	{{ else if or (eq $random 2) (eq $random 7) }}
+
+		{{ $image = (joinStr "" $image "914997229830434887/cry_3.gif") }}
+
+	{{ else if or (eq $random 3) (eq $random 8) }}
+
+		{{ $image = (joinStr "" $image "914997230224683098/cry_4.gif") }}
+
+	{{ else }}
+
+		{{ $image = (joinStr "" $image "914997230585413684/cry_5.gif") }}
+
+	{{ end }}
+
+	{{ $author = (joinStr "" .User.Username " cries! (T^T)") }}
+
+{{ else if eq $action "help" }}
+
+	{{ $description = (joinStr "\n" "**🙂 Emotes**" "`cry`  `pout`\n" "**🤗 Actions (use with @mention)**" "`cuddle`  `hug`  `lick`  `nom`  `pat`  `poke`  `bite`  `hold`  `boop`") }}
+
+	{{ $author = (joinStr "" .User.Username " requested help! Here's my commands! (>~<)") }}
+
+{{ else }}
+
+	{{ $author = "Invalid command!" }}
+
+{{ end }}
+
+ 
+
+{{ $embed = cembed
+
+	"description" $description
+
+	"author" (sdict
+
+		"name" $author
+
+		"icon_url" $avatar)
+
+	"image" (sdict "url" $image)
+
+	"color" 16240524
+
+}}
+
+ 
+
+{{ sendMessage nil $embed }}
