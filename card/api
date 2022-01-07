@@ -1,6 +1,4 @@
 {
-  "discord_server": "https://discord.gg/xJ2HRxZ", 
-  "patreon": "https://www.patreon.com/VACEfron", 
   "endpoints": [
     "GET: /adios?user=USER_AVATAR", 
     "GET: /batmanslap?text1=TEXT&text2=TEXT[&batman=USER_AVATAR][&robin=USER_AVATAR]", 
