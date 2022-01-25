@@ -2,6 +2,7 @@
 	Author: Chloe Cook (@raspberry#5310)
 	Trigger type: `Minute interval`
 	Interval: `5`
+	Run Time: `Manually run at a time of the following match - hh:m5:00 or hh:m0:00; this should read as a time divisible by 5 minutes`
 */ -}}
 
 {{ $now := currentTime }}
