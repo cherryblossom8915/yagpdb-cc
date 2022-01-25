@@ -1,0 +1,38 @@
+{{- /*
+	Author: Chloe Cook (@raspberry#5310)
+	Trigger type: `Exact Match`
+	Trigger: `!d bump`
+*/ -}}
+
+{{ $now := currentTime }}
+
+{{/* how often the server can be bumped (in minutes) */}}
+{{ $bumpCooldownMinutes := 120 }}
+
+{{/* can be changed, NOT RECOMMENDED */}}
+{{ $url := "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png" }}
+{{ $author := (sdict "name" "Thank you!" "icon_url" $url) }}
+{{ $description := (joinStr "" .User.Mention "Thank you for bumping our server! We will remind you again in 2 hours!") }}
+{{ $footer := (sdict "text" (joinStr "" $now.Month " " $now.Day " " $now.Year " " ($now.Format "15:04") " UTC")) }}
+
+{{/* database calls */}}
+{{ $globalCategoryID := toInt (dbGet 0 "Global").Value }}
+{{ $lastBumpTime := (dbGet $globalCategoryID "Last Bump").Value }}
+
+{{/* declare $thankYouMessage */}}
+{{ $thankYouMessage := cembed
+	"author" $author
+	"description" $description
+	"footer" $footer
+}}
+
+{{/* if cooldown has lifted, runs $thankYouMessage */}}
+{{ if $lastBumpTime }}
+	{{ $minutesSinceBump := toInt ($now.Sub $lastBumpTime).Minutes }}
+	{{ if gt $minutesSinceBump $bumpCooldownMinutes }}
+		{{ dbSet $globalCategoryID "Last Bump" $now }}
+		{{ sendMessage nil $thankYouMessage }}
+	{{ end }}
+{{ else }}
+	{{ dbSet $globalCategoryID "Last Bump" $now }}
+{{ end }}
