@@ -1,0 +1,48 @@
+{{- /*
+	Author: Chloe Cook (@raspberry#5310)
+	Trigger type: `Minute interval`
+	Interval: `5`
+*/ -}}
+
+{{ $now := currentTime }}
+
+{{/* the ID for your bump role */}}
+{{ $bumpRoleID := 911013141394112554 }}
+
+{{/* how often the server can be bumped (in minutes) */}}
+{{ $bumpCooldownMinutes := 120 }}
+
+{{/* how often the reminder should go off (in minutes, minimum is 5, maximum is the cooldown) once it's time to bump */}}
+{{ $interval := 30 }}
+
+{{/* can be changed, NOT RECOMMENDED */}}
+{{ $url := "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png" }}
+{{ $author := (sdict "name" "It's time to bump!" "icon_url" $url) }}
+{{ $description := "Bump our server by typing !d bump" }}
+{{ $footer := (sdict "text" (joinStr "" $now.Month " " $now.Day " " $now.Year " " ($now.Format "15:04") " UTC")) }}
+
+{{/* database call to get last bump time, gets set in other command */}}
+{{ $globalCategoryID := toInt (dbGet 0 "Global").Value }}
+{{ $lastBumpTime := (dbGet $globalCategoryID "Last Bump").Value }}
+
+{{/* declaration of $reminderMessage using configuration values */}}
+{{ $embed := cembed
+	"author" $author
+	"description" $description
+	"footer" $footer
+}}
+{{ $reminderMessage := (complexMessage "content" (mentionRoleID $bumpRoleID) "embed" $embed) }}
+
+{{/* if there is a last bump time, run this */}}
+{{ if $lastBumpTime }}
+	{{ $minutesSinceBump := toInt ($now.Sub $lastBumpTime).Minutes }}
+	{{ if (ge $minutesSinceBump $bumpCooldownMinutes) }}
+		{{/* send a reminder every 30 minutes */}}
+		{{ if lt (toInt (mod $minutesSinceBump $interval)) 5 }}
+			{{ sendMessageNoEscape .Channel.ID $reminderMessage }}
+		{{ end }}
+	{{ end }}
+{{/* if there is no last bump time, run this */}}
+{{ else }}
+	{{ sendMessageNoEscape .Channel.ID $reminderMessage }}
+{{ end }}
