@@ -1,0 +1,14 @@
+{{/* Setup Information
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Regex`
+	Interval: `\A\!!chk(Trap|Horde)`
+*/}}
+
+{{ if reFind `(?i)(Trap)` .Cmd }}
+   {{ $trap := (dbGet .Guild.ID "trap").Value.UTC }}
+   {{ print (joinStr "" "Trap is set for " $trap) }}
+{{ else if reFind `(?i)(Horde)` .Cmd }}
+   {{ $horde1 := (dbGet .Guild.ID "horde1").Value.UTC }}
+   {{ $horde2 := (dbGet .Guild.ID "horde2").Value.UTC }}
+   {{ print (joinStr "" "Horde is set for " $horde1 " and " $horde2) }}
+{{ end }}
