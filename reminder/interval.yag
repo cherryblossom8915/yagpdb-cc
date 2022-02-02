@@ -1,0 +1,87 @@
+{{/* Setup Information
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Minute interval`
+	Interval: `5`
+	Next Run: `Make sure it's divisible by 5 minutes, click run now to set the run time`
+*/}}
+
+{{/* Database Calls */}}
+{{ $trap := (dbGet .Guild.ID "trap").Value.UTC }}
+{{ $horde1 := (dbGet .Guild.ID "horde1").Value.UTC }}
+{{ $horde2 := (dbGet .Guild.ID "horde2").Value.UTC }}
+{{ $now := currentTime }}
+
+{{/* Trap Reminder */}}
+{{ if and (eq (toInt $now.Year) (toInt $trap.Year)) (eq $now.Month $trap.Month) (eq (toInt $now.Day) (toInt $trap.Day)) }}
+	{{ if eq (toInt $now.Hour) (sub (toInt $trap.Hour) 1) }}
+		{{ if eq (toInt $now.Minute) (toInt $trap.Minute) }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Trap is in 1 hour!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
+		{{ end }}
+	{{ else if eq (toInt $now.Hour) (toInt $trap.Hour) }}
+		{{ if eq (toInt $now.Minute) (toInt $trap.Minute) }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Trap is happening right now!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
+			{{ $date := $trap.AddDate 0 0 2 }}
+			{{ dbSet $.Guild.ID "trap" $date }}
+		{{ end }}
+	{{ end }}
+{{ end }}
+
+{{/* Tuesday Horde Reminder */}}
+{{ if and (eq (toInt $now.Year) (toInt $horde1.Year)) (eq $now.Month $horde1.Month) (eq (toInt $now.Day) (toInt $horde1.Day)) }}
+	{{ if eq (toInt $now.Hour) (sub (toInt $horde1.Hour) 1) }}
+		{{ if eq (toInt $now.Minute) (toInt $horde1.Minute) }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Horde is in 1 hour!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
+		{{ end }}
+	{{ else if eq (toInt $now.Hour) (toInt $horde1.Hour) }}
+		{{ if eq (toInt $now.Minute) (toInt $horde1.Minute) }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Horde is happening right now!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
+			{{ $date := $horde1.AddDate 0 0 14 }}
+			{{ dbSet $.Guild.ID "horde1" $date }}
+		{{ end }}
+	{{ end }}
+{{ end }}
+
+{{/* Thursday Horde Reminder */}}
+{{ if and (eq (toInt $now.Year) (toInt $horde2.Year)) (eq $now.Month $horde2.Month) (eq (toInt $now.Day) (toInt $horde2.Day)) }}
+	{{ if eq (toInt $now.Hour) (sub (toInt $horde2.Hour) 1) }}
+		{{ if eq (toInt $now.Minute) (toInt $horde2.Minute) }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Horde is in 1 hour!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
+		{{ end }}
+	{{ else if eq (toInt $now.Hour) (toInt $horde2.Hour) }}
+		{{ if eq (toInt $now.Minute) (toInt $horde2.Minute) }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Horde is happening right now!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
+			{{ $date := $horde2.AddDate 0 0 14 }}
+			{{ dbSet $.Guild.ID "horde2" $date }}
+		{{ end }}
+	{{ end }}
+{{ end }}
