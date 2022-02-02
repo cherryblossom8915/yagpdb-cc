@@ -30,6 +30,7 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
+			{{/* Add 2 days on automatically for next Trap date */}}
 			{{ $date := $trap.AddDate 0 0 2 }}
 			{{ dbSet $.Guild.ID "trap" $date }}
 		{{ end }}
@@ -55,6 +56,7 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
+			{{/* Add 2 weeks on automatically for next Horde date */}}
 			{{ $date := $horde1.AddDate 0 0 14 }}
 			{{ dbSet $.Guild.ID "horde1" $date }}
 		{{ end }}
@@ -80,6 +82,7 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
+			{{/* Add 2 weeks on automatically for next Horde date */}}
 			{{ $date := $horde2.AddDate 0 0 14 }}
 			{{ dbSet $.Guild.ID "horde2" $date }}
 		{{ end }}
