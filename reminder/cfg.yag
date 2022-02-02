@@ -1,0 +1,40 @@
+{{/* Setup Information
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Regex`
+	Interval: `\A\!!cfg (trap|horde)`
+*/}}
+
+{{ if reFind `(?i)(trap)` .Cmd }}
+	{{ if eq (len .Args) 7 }}
+		{{ $year := (toInt (index .Args 2)) }}
+		{{ $month := (toInt (index .Args 3)) }}
+		{{ $day := (toInt (index .Args 4)) }}
+		{{ $hour := (toInt (index .Args 5)) }}
+		{{ $minute := (toInt (index .Args 6)) }}
+		{{ $date := (newDate $year $month $day $hour $minute 0 "Atlantic/Reykjavik") }}
+		{{ dbSet $.Guild.ID "trap" $date }}
+		{{ sendMessage nil "Trap time has been set!" }}
+	{{ else }} 
+		{{ sendMessage nil "`!!cfg trap <year> <month> <day> <hour> <minute>`" }}
+	{{ end }}
+{{ else if reFind `(?i)(horde)` .Cmd }}
+	{{ if eq (len .Args) 12 }}
+		{{ $year1 := (toInt (index .Args 2)) }}
+		{{ $month1 := (toInt (index .Args 3)) }}
+		{{ $day1 := (toInt (index .Args 4)) }}
+		{{ $hour1 := (toInt (index .Args 5)) }}
+		{{ $minute1 := (toInt (index .Args 6)) }}
+		{{ $date1 := (newDate $year1 $month1 $day1 $hour1 $minute1 0 "Atlantic/Reykjavik") }}
+		{{ $year2 := (toInt (index .Args 7)) }}
+		{{ $month2 := (toInt (index .Args 8)) }}
+		{{ $day2 := (toInt (index .Args 9)) }}
+		{{ $hour2 := (toInt (index .Args 10)) }}
+		{{ $minute2 := (toInt (index .Args 11)) }}
+		{{ $date2 := (newDate $year2 $month2 $day2 $hour2 $minute2 0 "Atlantic/Reykjavik") }}
+		{{ dbSet $.Guild.ID "horde1" $date1 }}
+		{{ dbSet $.Guild.ID "horde2" $date2 }}
+		{{ sendMessage nil "Horde times have been set!" }}
+	{{ else }}
+		{{ sendMessage nil "`!!cfg horde <year1> <month1> <day1> <hour1> <minute1> <year2> <month2> <day2> <hour2> <minute2>`" }}
+	{{ end }}
+{{ end }}
