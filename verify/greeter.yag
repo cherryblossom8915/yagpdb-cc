@@ -10,7 +10,7 @@
 {{ $chanID := 0 }} {{/* THIS IS THE ID OF THE CHANNEL WHERE YOU SEND GREETING MESSAGES */}}
 {{ $ping := 0 }} {{/* THIS IS THE ID OF THE ROLE THAT GETS PINGED IN THE GREETING (i.e. WELCOME COMMITTEE), IF YOU HAVE ONE, IF NOT KEEP 0 */}}
 
-{{ $user := (userArg (index .Args 1)) }}
+{{ $user := (userArg (index .CmdArgs 0)) }}
 {{ giveRoleID $user.ID $role }} 
 {{ sendMessage nil (joinStr "" $user.Username " has been verified!") }}
 
