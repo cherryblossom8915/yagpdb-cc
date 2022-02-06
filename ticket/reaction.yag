@@ -4,7 +4,12 @@
 	Trigger: `Added reactions only`
 */ -}}
 
-{{ if eq .Message.ID 911583310176739358 }}
+{{/* CONFIGURABLE VALUES */}}
+{{ $msgID := 0 }} {{/* THIS SHOULD BE THE ID OF THE TICKET MENU MESSAGE */}}
+{{ $chanID := 0 }} {{/* THIS SHOULD BE THE ID OF THE CHANNEL THE TICKET MENU IS IN */}}
+
+{{ if eq .Message.ID $msgID }}
 	{{ createTicket nil "Help" }}
-	{{ deleteMessageReaction 889197900222062663 911583310176739358 .User.ID "📩" }}
+	{{ deleteMessageReaction $chanID $msgID .User.ID "📩" }}
 	{{ deleteResponse 0 }}
+{{ end }}
