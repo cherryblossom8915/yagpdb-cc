@@ -1,0 +1,38 @@
+{{ $topic := execAdmin "topic" }}
+{{ $fact := execAdmin "catfact" }}
+{{ $advice := execAdmin "advice" }}
+{{ $guild := .Guild.Name }}
+
+{{ $embed1 := cembed
+	"title" "Daily Topic"
+	"description" $topic
+	"color" 15968450
+	"thumbnail" (sdict "url" "https://emoji.gg/assets/emoji/5817-kuromi-question.png")
+	"footer" (sdict
+		"text" (joinStr "" "YAGPDB.xyz - " $guild)
+		"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png")
+}}
+
+{{ $embed2 := cembed
+	"title" "Daily Fact"
+	"description" $fact
+	"color" 15559025
+	"thumbnail" (sdict "url" "https://i.pinimg.com/originals/6d/37/9d/6d379d65271a4b92b4a22f49d7d0ad47.webp")
+	"footer" (sdict
+		"text" (joinStr "" "YAGPDB.xyz - " $guild)
+		"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png")
+}}
+
+{{ $embed3 := cembed
+	"title" "Daily Advice"
+	"description" $advice
+	"color" 16760985
+	"thumbnail" (sdict "url" "https://i.pinimg.com/originals/76/e8/65/76e865a03176c1290331c0b5a03f168e.png")
+	"footer" (sdict
+		"text" (joinStr "" "YAGPDB.xyz - " $guild)
+		"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png")
+}}
+
+{{ sendMessage nil $embed1 }}
+{{ sendMessage nil $embed2 }}
+{{ sendMessage nil $embed3 }}
