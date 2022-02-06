@@ -1,0 +1,40 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Command`
+	Trigger: `color`
+*/ -}}
+
+{{/* CONFIGURABLE VALUE */}}
+{{ $url := "" }} {{/* PASTE THE URL TO THE IMAGE HERE IF YOU HAVE ONE, THIS SHOULD BE AN IMAGE OF THE NUMBERED ROLES */}}
+{{ $amt := 0 }} {{/* TYPE THE NUMBER OF ROLES YOU INTEND TO HAVE */}}
+
+{{ $id := sendMessageRetID nil (cembed 
+	"title" "Color Roles"
+	"image" (sdict "url" $url)
+	"color" 14232643
+	"footer" (sdict
+		"text" "YAGPDB.xyz - Giving colors easily"
+		"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png")
+	) }}
+
+{{ if eq 1 $amt }}
+	{{ addMessageReactions nil $id  ":one:" }}
+{{ else if eq 2 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" }}
+{{ else if eq 3 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" }}
+{{ else if eq 4 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" }}
+{{ else if eq 5 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" ":five:" }}
+{{ else if eq 6 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" ":five:" ":six:" }}
+{{ else if eq 7 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" ":five:" ":six:" ":seven:" }}
+{{ else if eq 8 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" ":five:" ":six:" ":seven:" ":eight:" }}
+{{ else if eq 9 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" ":five:" ":six:" ":seven:" ":eight:" ":nine:" }}
+{{ else if eq 10 $amt }}
+	{{ addMessageReactions nil $id  ":one:" ":two:" ":three:" ":four:" ":five:" ":six:" ":seven:" ":eight:" ":nine:" ":keycap_ten:" }}
+{{ end }}
