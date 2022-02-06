@@ -1,0 +1,16 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Comamnd`
+	Trigger: `ticket`
+*/ -}}
+
+{{ $id := sendMessageRetID nil (cembed 
+    "title" ("Staff Help")
+    "description" ("To create a ticket react with 📩")
+    "color" 14232643
+    "footer"
+    (sdict
+        "text" "YAGPDB.xyz - Ticketing without clutter"
+            "icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png")
+        ) }}
+{{ addMessageReactions nil $id  "📩" }}
