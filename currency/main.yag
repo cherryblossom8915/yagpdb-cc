@@ -1,0 +1,139 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Regex`
+	Trigger: `\A-(currency|bal|balance|pay|net|find|daily)`
+*/ -}}
+
+{{/* CONFIGURABLE VALUES */}}
+{{ $currencyIcon := "" }} {{/* THIS IS THE URL TO THE IMAGE OF YOUR CURRENCY ICON */}}
+{{ $currencyDB := "" }} {{/* THIS IS THE NAME OF YOUR CURRENCY DATABASE */}}
+{{ $dailyRole := 0 }} {{/* THIS IS THE ID OF YOUR DAILY ROLE, NEEDED FOR TRACKING */}}
+{{ $walletMin := 0 }} {{/* THIS IS THE MINIMUM AMOUNT A USER SHOULD GET FROM FINDING A WALLET */}}
+{{ $walletMax := 0 }} {{/* THIS IS THE MAXIMUM AMOUNT A USER SHOULD GET FROM FINDING A WALLET */}}
+{{ $dailyMin := 0 }} {{/* THIS IS THE MINIMUM AMOUNT A USER SHOULD GET FROM CHECKING IN */}}
+{{ $dailyMax := 0 }} {{/* THIS IS THE MAXIMUM AMOUNT A USER SHOULD GET FROM CHECKING IN */}}
+
+{{ $balance := toInt (dbGet .User.ID $currencyDB).Value }}
+{{ $user := "" }}
+{{ $name := or .Member.Nick .User.Username }}
+{{ $name2 := "" }}
+{{ if eq (len .Args) 3 }}
+	{{ $user = (userArg (index .Args 2)) }}
+	{{ $name2 = or (getMember $user.ID).Nick $user.Username }}
+{{ end }}
+
+{{/* GIVES A SUMMARY OF THE BALANCE COMMANDS */}}
+{{ if reFind `(?i)(currency)` .Cmd }}
+	{{ deleteTrigger 1 }}
+	{{ $embed := cembed
+		"title" "YAGPDB.xyz Currency Commands"
+		"description" (joinStr "" "**-currency** - Displays this menu!\n**-bal** or **-balance** - Displays your current balance!\n**-pay <amt> <mention>** - will pay the mentioned user currency from your stash!\n**-net** - Will display the net worth of the top 10 users!\n**-find** - May be used to find wallets in the channel the user is in, wallets give between " $walletMin " and " $walletMax "\n**-daily** - May be used to once every 24 hours to give yourself " $dailyMin " to " $dailyMax " points!\n\n**Ways to earn points**\n**Counting** - Can earn currency, the amount earned will increase with the count at a decelerating rate (meaning lower counts earn less, but increase the amount quickly, higher counts, earn more, but increase the amount slowly)!\n**Talking** - Between 1 and 100 messages, 15 to 30 currency will be generated, this will be most common between 15 and 30 messages however!\n\n**Point Usage**\nThere is a role shop you may spend currency at, roles disappear after 24 hours!")
+		"color" 16240780
+		"author" (sdict
+			"name" "Scope of Utility"
+			"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png?size=80"
+		) }}
+	{{ sendMessage nil $embed }}
+	
+{{/* CHECKS YOUR BALANCE */}}
+{{ else if reFind `(?i)(bal|balance)` .Cmd }}
+	{{ $embed := cembed
+		"fields" (cslice
+			(sdict "name" "You have" "value" (print $balance " " $currencyDB) "inline" false))
+		"thumbnail" (sdict "url" $currencyIcon)
+		"author" (sdict "name" $name "icon_url" ($.User.AvatarURL "256"))
+	}}
+	{{ sendMessage nil $embed }}
+
+{{/* PAYS ANOTHER USER */}}
+{{ else if reFind `(?i)(pay)` .Cmd }}
+	{{ $amount := (toInt (index .Args 1)) }}
+	{{ $userHad := toInt (dbGet (toInt64 $user.ID) $currencyDB).Value }}
+	
+	{{ if le $amount $balance }}
+		{{ $r := dbIncr (toInt64 $user.ID) $currencyDB $amount }}
+		{{ $r := dbIncr $.User.ID $currencyDB (mult $amount -1) }}
+		{{ $embed1 := cembed
+			"author" (sdict "name" "Money Send" "icon_url" (.User.AvatarURL "256"))
+			"description" (joinStr "" $name " had " $balance " 🪙 but now has " (toInt (dbGet $.User.ID $currencyDB).Value) " 🪙 after paying " $name2 "!")
+		}}
+		{{ $embed2 := cembed
+			"author" (sdict "name" "Money Receive" "icon_url" ($user.AvatarURL "256"))
+			"description" (joinStr "" $name2 " had " $userHad " 🪙 but now has " (toInt (dbGet (toInt64 $user.ID) $currencyDB).Value) " 🪙 after being paid by " $name "!")
+		}}
+		{{ sendMessage nil $embed1 }}
+		{{ sendMessage nil $embed2 }}
+	{{ else }}
+		{{ $embed := cembed
+			"description" "The transaction could not be made! Send amount is too high!"
+		}}
+		{{ sendMessage nil $embed }}
+	{{ end }}
+
+{{/* CHECKS THE LEADERBOARD FOR TOP 10 USERS */}}
+{{ else if reFind `(?i)(net)` .Cmd }}
+	{{ $page := 1 }}
+	{{ with reFind `\d+` (joinStr " " .CmdArgs) }} {{ $page = . | toInt }} {{ end }}
+	{{ $skip := mult (sub $page 1) 10 }}
+	{{ $users := dbTopEntries $currencyDB 10 $skip }}
+	{{ if not (len $users) }}
+		There were no users on that page!
+	{{ else }}
+		{{ $rank := $skip }}
+		{{ $display := "" }}
+		{{ range $users }}
+			{{- $currency := toInt .Value }}
+			{{- $rank = add $rank 1 }}
+			{{- $display = printf "%s\n• **%d.** %s : %d 🪙"
+				$display $rank .User.Username $currency -}}
+		{{ end }}
+		{{ $id := sendMessageRetID nil (cembed
+			"title" "❯ Net Worth"
+			"description" $display
+			"footer" (sdict "text" (joinStr "" "Page " $page))
+		) }}
+	{{ end }}
+	
+{{/* FINDS WALLETS */}}
+{{ else if reFind `(?i)(find)` .Cmd }}
+	{{ $msg := "" }}
+	{{ $wallet := (randInt $walletMin $walletMax) }}
+	{{ $dbName := "Drops" }}
+	{{ $d := toInt (dbGet .Channel.ID $dbName).Value }}
+	
+	{{ if gt $d 0 }}
+		{{ $d := dbIncr $.Channel.ID $dbName -1 }}
+		{{ $balance := dbIncr $.User.ID $currencyDB $wallet }}
+		{{ $msg = (joinStr "" $name " found a wallet with " $wallet " 🪙 in it! " $name " now has " $balance " 🪙!") }}
+	{{ else }}
+		{{ $msg = "There are no wallets to find right now!" }}
+	{{ end }}
+	
+{{/* DAILY COMMAND */}}
+{{ else if reFind `(?i)(daily)` .Cmd }}
+	{{ $msg := "" }}
+	{{ $daily := (randInt $dailyMin $dailyMax) }}
+
+	{{$isGlobal := 0 }}
+	{{ $now := currentTime }}
+	{{ $name := "daily" }}
+	{{ $id := 0 }}
+	{{ $key := joinStr "" "cooldown_" $name }}
+	{{ if eq $isGlobal 0 }}
+		{{ $id = .User.ID }}
+	{{ end }}
+	
+	{{ if hasRoleID $dailyRole }}
+		{{ $time := (dbGet (toInt64 $id) $key).Value }}
+		{{ $cd := toInt (sub 1440 ($now.Sub $time).Minutes) }}
+		{{ $msg = (joinStr "" "You already got your daily points today, please wait " $cd " more minutes!") }}
+	{{else}}
+		{{ $balance := dbIncr $.User.ID $currencyDB $daily }}
+		{{ $msg = (joinStr "" $.User.Username " earned " $daily " points! " $.User.Username " now has " $balance " points!") }}
+		{{ addRoleID $dailyRole }}
+		{{ removeRoleID $dailyRole 86400 }}
+		{{ dbSet (toInt64 $id) $key $now }}
+	{{end}}
+	
+	{{ sendMessage nil $msg }}
+{{ end }}
