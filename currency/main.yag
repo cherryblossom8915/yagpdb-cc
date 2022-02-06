@@ -13,6 +13,7 @@
 {{ $dailyMin := 0 }} {{/* THIS IS THE MINIMUM AMOUNT A USER SHOULD GET FROM CHECKING IN */}}
 {{ $dailyMax := 0 }} {{/* THIS IS THE MAXIMUM AMOUNT A USER SHOULD GET FROM CHECKING IN */}}
 
+{{ $msg := "" }}
 {{ $balance := toInt (dbGet .User.ID $currencyDB).Value }}
 {{ $user := "" }}
 {{ $name := or .Member.Nick .User.Username }}
@@ -96,7 +97,6 @@
 	
 {{/* FINDS WALLETS */}}
 {{ else if reFind `(?i)(find)` .Cmd }}
-	{{ $msg := "" }}
 	{{ $wallet := (randInt $walletMin $walletMax) }}
 	{{ $dbName := "Drops" }}
 	{{ $d := toInt (dbGet .Channel.ID $dbName).Value }}
@@ -108,10 +108,10 @@
 	{{ else }}
 		{{ $msg = "There are no wallets to find right now!" }}
 	{{ end }}
+	{{ sendMessage nil $msg }}
 	
 {{/* DAILY COMMAND */}}
 {{ else if reFind `(?i)(daily)` .Cmd }}
-	{{ $msg := "" }}
 	{{ $daily := (randInt $dailyMin $dailyMax) }}
 
 	{{$isGlobal := 0 }}
@@ -134,6 +134,5 @@
 		{{ removeRoleID $dailyRole 86400 }}
 		{{ dbSet (toInt64 $id) $key $now }}
 	{{end}}
-	
 	{{ sendMessage nil $msg }}
 {{ end }}
