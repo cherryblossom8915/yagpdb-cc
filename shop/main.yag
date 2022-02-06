@@ -7,9 +7,9 @@
 {{/* CONFIGURABLE VALUES */}}
 {{ $cost := 0 }} {{/* THIS IS HOW MUCH THE ROLES SHOULD COST */}}
 {{ $roles := sdict
-    "1️⃣" "roleName1"
-    "2️⃣" "roleName2"
-    "3️⃣" "roleName3"
+	"1️⃣" "roleName1"
+	"2️⃣" "roleName2"
+	"3️⃣" "roleName3"
 }} {{/* THIS IS WHERE YOU SET UP THE CORRESPONDING REACTIONS AND ROLES YOU WANT FOR YOUR SHOP */}}
 {{ $msgID := 938694872674750494 }} {{/* THIS IS THE ID OF THE SHOP MESSAGE */}}
 {{ $chanID := 938682161240891392 }} {{/* THIS IS THE ID OF THE CHANNEL THE SHOP IS IN */}}
