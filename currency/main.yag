@@ -137,7 +137,7 @@
 	{{ sendMessage nil $msg }}	
 
 {{/* CHECKS HOW MANY DROPS ARE IN THE CHANNEL */}}
-{{ else if reFind `(?i)(daily)` .Cmd }}
+{{ else if reFind `(?i)(chkDrops)` .Cmd }}
 	{{ $dbName := "Drops" }}
 	{{ $d := toInt (dbGet .Channel.ID $dbName).Value }}
 	{{ sendMessage nil (joinStr "" "There are " $d " wallet drop(s) in this channel!") }}
