@@ -9,7 +9,7 @@
 {{ $embed := "" }}
 {{ $description := "" }}
 {{ $avatar := .User.AvatarURL "256" }}
-{{ $image := "https://github.com/cherryblossom8915/yagpdb-cc/yagpdb-cc-2/blob/main/assets/" }}
+{{ $image := "https://github.com/cherryblossom8915/yagpdb-cc/blob/main/assets/" }}
 {{ $author := "" }}
 
 {{ if gt (len .Args) 1 }}
