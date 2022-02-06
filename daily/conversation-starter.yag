@@ -1,3 +1,8 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `interval`
+*/ -}}
+
 {{ $topic := execAdmin "topic" }}
 {{ $fact := execAdmin "catfact" }}
 {{ $advice := execAdmin "advice" }}
