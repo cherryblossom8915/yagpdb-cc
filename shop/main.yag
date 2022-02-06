@@ -19,6 +19,7 @@
 	{{ $db := "Cuwency"}}
 	{{ $r := toInt (dbGet $user.ID $db).Value }}
 	{{ if ge $r $cost }}
+		{{ $r := dbIncr $user.ID $db (mult -1 $cost) }}
 		{{with $roles.Get .Reaction.Emoji.Name}}
 			{{range $i, $v := $roles}}
 				{{- removeRoleName . -}}
