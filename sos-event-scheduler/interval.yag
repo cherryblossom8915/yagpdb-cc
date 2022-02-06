@@ -5,17 +5,6 @@
 	Next Run: `Make sure it's divisible by 5 minutes, click run now to set the run time`
 */}}
 
-{{/*creates initial database slots. you can delete this after first run if you know what you are doing*/}}
-{{if not (dbGet .Guild.ID "trap")}}
-	{{dbSet .Guild.ID "trap" ""}}
-{{end}}
-{{if not (dbGet .Guild.ID "horde1")}}
-	{{dbSet .Guild.ID "horde1" ""}}
-{{end}}
-{{if not (dbGet .Guild.ID "horde2")}}
-	{{dbSet .Guild.ID "horde2" ""}}
-{{end}}
-
 {{/* Database Calls */}}
 {{ $trap := (dbGet .Guild.ID "trap").Value.UTC }}
 {{ $horde1 := (dbGet .Guild.ID "horde1").Value.UTC }}
@@ -32,6 +21,13 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
+		{{ else if eq (toInt $now.Minute) ($trap.Add (toDuration (mult -10 .TimeMinute))).Minute }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Trap is in 10 minutes!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
 		{{ end }}
 	{{ else if eq (toInt $now.Hour) (toInt $trap.Hour) }}
 		{{ if eq (toInt $now.Minute) (toInt $trap.Minute) }}
@@ -41,7 +37,6 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
-			{{/* Add 2 days on automatically for next Trap date */}}
 			{{ $date := $trap.AddDate 0 0 2 }}
 			{{ dbSet $.Guild.ID "trap" $date }}
 		{{ end }}
@@ -58,6 +53,13 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
+		{{ else if eq (toInt $now.Minute) ($horde1.Add (toDuration (mult -10 .TimeMinute))).Minute }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Horde is in 10 minutes!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
 		{{ end }}
 	{{ else if eq (toInt $now.Hour) (toInt $horde1.Hour) }}
 		{{ if eq (toInt $now.Minute) (toInt $horde1.Minute) }}
@@ -67,7 +69,6 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
-			{{/* Add 2 weeks on automatically for next Horde date */}}
 			{{ $date := $horde1.AddDate 0 0 14 }}
 			{{ dbSet $.Guild.ID "horde1" $date }}
 		{{ end }}
@@ -84,6 +85,13 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
+		{{ else if eq (toInt $now.Minute) ($horde2.Add (toDuration (mult -10 .TimeMinute))).Minute }}
+			{{ $embed := cembed
+				"author" (sdict "name" "NOTIFICATION:" "icon_url" "https://img.apksum.com/31/com.kingsgroup.sos/1.6.22/icon.png")
+				"description" "Horde is in 10 minutes!"
+			}}
+			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
+			{{ sendMessageNoEscape nil $msg }}
 		{{ end }}
 	{{ else if eq (toInt $now.Hour) (toInt $horde2.Hour) }}
 		{{ if eq (toInt $now.Minute) (toInt $horde2.Minute) }}
@@ -93,7 +101,6 @@
 			}}
 			{{ $msg := (complexMessage "content" "@everyone" "embed" $embed) }}
 			{{ sendMessageNoEscape nil $msg }}
-			{{/* Add 2 weeks on automatically for next Horde date */}}
 			{{ $date := $horde2.AddDate 0 0 14 }}
 			{{ dbSet $.Guild.ID "horde2" $date }}
 		{{ end }}
