@@ -1,0 +1,10 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Reaction`
+	Trigger: `Added reactions only`
+*/ -}}
+
+{{ if eq .Message.ID 911583310176739358 }}
+	{{ createTicket nil "Help" }}
+	{{ deleteMessageReaction 889197900222062663 911583310176739358 .User.ID "📩" }}
+	{{ deleteResponse 0 }}
