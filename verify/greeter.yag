@@ -17,5 +17,5 @@
 {{ if eq 0 $ping }}
 	{{ sendMessage $chanID (joinStr "" "Welcome " $user.Mention ", you've been verified successfully!") }}
 {{ else }}
-	{{ sendMessage $chanID (joinStr "" "<@&" $ping "> welcome " $user.Mention ", they've been verified successfully!") }}
+	{{ sendMessageNoEscape $chanID (joinStr "" (mentionRoleID $ping) " welcome " $user.Mention ", they've been verified successfully!") }}
 {{ end }}
