@@ -1,7 +1,7 @@
 {{- /*
 	Author: Chloe Cook (@cherry blossom)
 	Trigger type: `Regex`
-	Trigger: `\A-(currency|bal|balance|pay|net|find|daily)`
+	Trigger: `\A-(currency|bal|balance|pay|net|find|daily|chkDrops)`
 */ -}}
 
 {{/* CONFIGURABLE VALUES */}}
@@ -134,5 +134,11 @@
 		{{ removeRoleID $dailyRole 86400 }}
 		{{ dbSet (toInt64 $id) $key $now }}
 	{{end}}
-	{{ sendMessage nil $msg }}
+	{{ sendMessage nil $msg }}	
+
+{{/* CHECKS HOW MANY DROPS ARE IN THE CHANNEL */}}
+{{ else if reFind `(?i)(daily)` .Cmd }}
+	{{ $dbName := "Drops" }}
+	{{ $d := toInt (dbGet .Channel.ID $dbName).Value }}
+	{{ sendMessage nil (joinStr "" "There are " $d " wallet drop(s) in this channel!") }}
 {{ end }}
