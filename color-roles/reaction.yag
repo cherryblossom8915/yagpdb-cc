@@ -1,0 +1,13 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Reaction`
+	Trigger: `Added reactions only`
+*/ -}}
+
+{{/* CONFIGURABLE VALUES */}}
+{{ $msgID := 0 }} {{/* THIS SHOULD BE THE ID OF THE MESSAGE THE ROLEMENU IS ON */}}
+{{ $chanID := 0 }} {{/* THIS SHOULD BE THE ID OF THE CHANNEL THE MESSAGE */}}
+
+{{ else if eq .Message.ID $smgID }}
+	{{ sleep 1 }}
+	{{ deleteMessageReaction $chanID $msgID .User.ID .Reaction.Emoji.Name }}
