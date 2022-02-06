@@ -1,0 +1,25 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Regex`
+	Trigger: `\A`
+*/ -}}
+
+{{ $chanID := (toInt64 .Message.ChannelID) }}
+
+{{ if eq $channelID 911705028400656454 }}
+	{{ $avatar := .User.AvatarURL "256" }}
+	{{ $user := or .Member.Nick .User.Username }}
+	{{ $embed := cembed
+		"title" (joinStr "" "Thank you " $user "!")
+		"description" (joinStr "" "**" $user "** boosted the server! We appreciate your contribution! You've received one reputation as well [and more from anyone who thanks you individually as well]! Feel free to let us know in a ticket [within reason] what we can do for the server!")
+		"thumbnail" (sdict "url" $avatar)
+		"footer" (sdict
+			"text" "YAGPDB.xyz - Thanking you for your boosts!"
+			"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png")
+	}}
+	
+	{{ if eq .Message.Type 8 9 10 11 }}
+		{{ execAdmin "grep" (userArg .User.ID) 1 }}
+		{{ sendMessage nil $embed }}
+	{{ end }}
+{{ end }}
