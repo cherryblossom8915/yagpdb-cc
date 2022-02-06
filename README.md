@@ -2,7 +2,6 @@
 
 ## What programs I have
 
-verify
 <details>
 <summary>Actions</summary>
 
