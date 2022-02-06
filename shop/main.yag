@@ -1,0 +1,37 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Reaction`
+	Trigger: `Added reactions only`
+*/ -}}
+
+{{/* CONFIGURABLE VALUES */}}
+{{ $cost := 0 }} {{/* THIS IS HOW MUCH THE ROLES SHOULD COST */}}
+{{ $roles := sdict
+    "1️⃣" "roleName1"
+    "2️⃣" "roleName2"
+    "3️⃣" "roleName3"
+}} {{/* THIS IS WHERE YOU SET UP THE CORRESPONDING REACTIONS AND ROLES YOU WANT FOR YOUR SHOP */}}
+{{ $msgID := 938694872674750494 }} {{/* THIS IS THE ID OF THE SHOP MESSAGE */}}
+{{ $chanID := 938682161240891392 }} {{/* THIS IS THE ID OF THE CHANNEL THE SHOP IS IN */}}
+{{ $user := .User }}
+
+{{ if eq .Message.ID $msgID }}
+	{{ $db := "Cuwency"}}
+	{{ $r := toInt (dbGet $user.ID $db).Value }}
+	{{ if ge $r $cost }}
+		{{with $roles.Get .Reaction.Emoji.Name}}
+			{{range $i, $v := $roles}}
+				{{- removeRoleName . -}}
+			{{end}}
+			{{addRoleName . }}
+			{{ $mid := sendMessageRetID nil (joinStr "" $user.Mention " congrats you've bought the role **" . "** for 24 hours!") }}
+			{{ deleteMessage nil $mid 10 }}
+			{{ removeRoleName . 86400 }}
+		{{end}}
+	{{ else }}
+		{{ $mid := sendMessageRetID nil (joinStr "" $user.Mention " you don't have enough money to buy a role!") }}
+		{{ deleteMessage nil $mid 10 }}
+	{{ end }}
+	{{ sleep 1 }}
+	{{ deleteMessageReaction $chanID $msgID $user.ID .Reaction.Emoji.Name }}
+{{ end }}
