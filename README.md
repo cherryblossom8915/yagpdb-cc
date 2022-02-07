@@ -64,7 +64,7 @@ Do users use commands that much, would they go through the effort of opening a t
 Have a verification process members have to go through before they can talk? We do, they even get kicked within 24 hours if they don't verify, so it was important to us to make sure members got verified in a timely manner and even that they had other members to welcome them. This verification command will verify the user and ping your greetings channel so they can feel more welcomed into your server!
 </details>
 
-<detials>
+<details>
 <summary>Help</summary>
 
 Made modifications to the in-built help command as the server began to rely more heavily on Custom Commands, make sure to disable the help command in command overrides by setting deleteResponse to 0. Don't worry, the custom command will still send the original help command as well through an exec command! All will be good!
