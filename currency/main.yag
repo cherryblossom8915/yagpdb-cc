@@ -1,7 +1,7 @@
 {{- /*
 	Author: Chloe Cook (@cherry blossom)
 	Trigger type: `Regex`
-	Trigger: `\A-(currency|bal|balance|pay|net|find|daily|chkDrops)`
+	Trigger: `\A-(bal|balance|pay|net|find|daily|chkDrops)`
 */ -}}
 
 {{/* CONFIGURABLE VALUES */}}
@@ -23,21 +23,8 @@
 	{{ $name2 = or (getMember $user.ID).Nick $user.Username }}
 {{ end }}
 
-{{/* GIVES A SUMMARY OF THE BALANCE COMMANDS */}}
-{{ if reFind `(?i)(currency)` .Cmd }}
-	{{ deleteTrigger 1 }}
-	{{ $embed := cembed
-		"title" "YAGPDB.xyz Currency Commands"
-		"description" (joinStr "" "**-currency** - Displays this menu!\n**-bal** or **-balance** - Displays your current balance!\n**-pay <amt> <mention>** - will pay the mentioned user currency from your stash!\n**-net** - Will display the net worth of the top 10 users!\n**-find** - May be used to find wallets in the channel the user is in, wallets give between " $walletMin " and " $walletMax "\n**-daily** - May be used to once every 24 hours to give yourself " $dailyMin " to " $dailyMax " points!\n\n**Ways to earn points**\n**Counting** - Can earn currency, the amount earned will increase with the count at a decelerating rate (meaning lower counts earn less, but increase the amount quickly, higher counts, earn more, but increase the amount slowly)!\n**Talking** - Between 1 and 100 messages, 15 to 30 currency will be generated, this will be most common between 15 and 30 messages however!\n\n**Point Usage**\nThere is a role shop you may spend currency at, roles disappear after 24 hours!")
-		"color" 16240780
-		"author" (sdict
-			"name" "Scope of Utility"
-			"icon_url" "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png?size=80"
-		) }}
-	{{ sendMessage nil $embed }}
-	
 {{/* CHECKS YOUR BALANCE */}}
-{{ else if reFind `(?i)(bal|balance)` .Cmd }}
+{{ if reFind `(?i)(bal|balance)` .Cmd }}
 	{{ $embed := cembed
 		"fields" (cslice
 			(sdict "name" "You have" "value" (print $balance " " $currencyDB) "inline" false))
