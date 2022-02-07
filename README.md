@@ -68,6 +68,7 @@ Have a verification process members have to go through before they can talk? We 
 <summary>Help</summary>
 
 Made modifications to the in-built help command as the server began to rely more heavily on Custom Commands, make sure to disable the help command in command overrides by setting deleteResponse to 0. Don't worry, the custom command will still send the original help command as well through an exec command! All will be good!
+</details>
 ---
 
 ## How can I contact you?
