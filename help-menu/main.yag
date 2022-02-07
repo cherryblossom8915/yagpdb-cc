@@ -1,0 +1,108 @@
+{{ $embed := (cembed
+	"title" ("Custom Help Commands")
+	"color" 14232643
+	"fields" (cslice 
+		(sdict "name" "Birthdays" "value" "`-help birthday`" "inline" false) 
+		(sdict "name" "Ranks" "value" "`-help rank`" "inline" false) 
+		(sdict "name" "Counting" "value" "`-help count`" "inline" false)
+		(sdict "name" "Currency" "value" "`-help currency`" "inline" false)
+		(sdict "name" "Fun" "value" "`-help fun`" "inline" false)
+		(sdict "name" "Staff" "value" "`-help staff`" "inline" false)
+)) }}
+{{ $bday := (cslice 
+	(sdict "name" "Set Birthday" "value" "Use the command `!mybirthday mm/dd/yyyy` to set your birthday!" "inline" false) 
+	(sdict "name" "Retrieve Birthday" "value" "Use the command `!getbirthday @user` to retrieve the birthday of the mentioned user!" "inline" false) 
+	(sdict "name" " Set Others (Admin only)" "value" "Use the command `!setbirthday mm/dd/yyyy @user` to set the birthday of the mentioned user!" "inline" false)
+	(sdict "name" "Delete Birthday (Admin only)" "value" "Use the command `!delbirthday @user` to delete the birthday of the mentioned user!" "inline" false)
+) }}
+{{ $rank := (cslice 
+	(sdict "name" "Leaderboard" "value" "Use the command `-leaderboard` to display the first 100!" "inline" false) 
+	(sdict "name" "Rank" "value" "Use the command `-rank` to display your current ranking!" "inline" false)
+	(sdict "name" "Rank Card" "value" "Use the command `-card` to display more info!" "inline" false) 
+	(sdict "name" " Leveling Settings (Admin only)" "value" "Use the command `-leveling help` to display more info!" "inline" false)
+	(sdict "name" "Role Rewards (Admin only)" "value" "Use the command `-role-rewards help` to display info on how to configure rewards for leveling up!" "inline" false)
+	(sdict "name" "Setting Levels (Admin only)" "value" "Use the command `-setlevel @user 12345` to set the level of a user!" "inline" false)
+) }}
+{{ $count := (cslice 
+	(sdict "name" "Count" "value" "Use the command `-count` to check the amount of times you have counted!" "inline" false) 
+	(sdict "name" "Top Counts" "value" "Use the command `-topcount` to see how many times others have counted!" "inline" false)
+	(sdict "name" "Check Count" "value" "Use the command `-chkCount` to check the count!" "inline" false)
+	(sdict "name" "Set Count (Staff-Only)" "value" "Use the command `-setcount` to set the count!" "inline" false) 
+) }}
+{{ $eco := (cslice
+	(sdict "name" "Balance" "value" "Use the command `-bal` or `-balance` to displays your current balance!" "inline" false)
+	(sdict "name" "Money Transfers" "value" "Use the command `-pay <amt> <mention>` to pay the mentioned user the amount listed from your balance" "inline" false)
+	(sdict "name" "Net Worth" "value" "Use the command `-net` to display the net worth of the top 10 users!" "inline" false)
+	(sdict "name" "Finding Wallets" "value" "use the command `-find` to find wallets in the current channel, users will be notified when a wallet drops!" "inline" false)
+) }}
+{{ $fun := (cslice
+	(sdict "name" "Bot Access" "value" "You need the <@&904479893084078171> role to access the bot channels, you can get this in <#858187110897025094>!" "inline" false)
+	(sdict "name" "Counting" "value" "You can earn currency by counting, the amount earned will increase with the count at a decelerating rate (meaning lower counts earn less, but increase the amount quickly, higher counts, earn more, but increase the amount slowly)!" "inline" false)
+	(sdict "name" "Point Usage" "value" "There is a role shop you may spend currency at, roles disappear after 24 hours!" "inline" false)
+	(sdict "name" "Actions/Emotes" "value" "I have the ability to send emotes! My function is similar to that of **OwO#8456**! If you need to see what actions and emotes I have use the command `yag help`\nAll the gifs were hand selected to fit this server better!" "inline" false)
+	(sdict "name" "Guess the Number" "value" "This game happens in the bot channel, this number is between 1 and 50. You'll get a hint every 3 incorrect guesses, and Staff can also use the command **-hint** if needed!" "inline" false)
+	(sdict "name" "Wheel of Fortune" "value" "Use the command `-wheeloffortune <bet>`, you can bet any amount over 1 Cuwency. This game works by either splitting or multiplying your bet, this can result in gain or loss. You will always receive a return though!" "inline" false)
+	(sdict "name" "Slot Machine" "value" "Use the command `-slots <bet>` in this game you can bet between 50 and 500 Cuwency. The loss and gain in this game is more dramatic, so proceed with caution! Three money bags 💰 will return 15x the amount you bet! Will you risk it all for the jackpot?" "inline" false)
+	(sdict "name" "Connect4" "value" "Use the command `-c4 @user`, this game is just for fun, there is no Cuwency involved!" "inline" false)
+	(sdict "name" "Family-Friendly Cards Against Humanity" "value" "Use the command `-newgame`, this game is just for fun, no Cuwency!" "inline" false)
+	(sdict "name" "Mazes" "value" "Use the command `-maze` or `-maze <crossing>`, crossings make the maze more difficult, this will give you a maze to solve, take a screenshot, and you can start solving it!" "inline" false)
+) }}
+{{ $staff := (cslice
+	(sdict "name" "Onduty" "value" "Use the command `-onduty` to go onduty, you will be onduty for 5 hours, at the end of 5 hours you will be sent a DM telling you have been removed!" "inline" false)
+	(sdict "name" "Offduty" "value" "Use the command `-offduty` to go offduty if you need to go offline before the 5 hours are up!" "inline" false)
+	(sdict "name" "List" "value" "Use the command `-onduty list` to list Staff who are currently onduty" "inline" false)
+) }}
+
+{{ if and .CmdArgs (eq .Cmd "-help") }}
+	{{ $subCmd := index .CmdArgs 0 }}
+	{{if eq $subCmd "birthday"}}
+		{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"fields" $bday
+		) }}
+	{{ else if eq $subCmd "rank" }}
+		{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"fields" $rank
+		) }}
+	{{ else if eq $subCmd "count" }}
+		{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"fields" $count
+		) }}
+	{{ else if eq $subCmd "currency" }}
+		{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"fields" $eco
+		) }}
+	{{ else if eq $subCmd "fun" }}
+		{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"fields" $fun
+		) }}
+	{{ else if eq $subCmd "staff" }}
+		{{ if (hasRoleID 874087456436265050) }}
+			{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"fields" $staff
+		) }}
+		{{ else }}
+			{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"description" "You do not have access to this command!"
+		) }}
+		{{ end }}
+	{{ end }}
+	{{ sendMessage nil $embed }}
+	{{ deleteResponse 0 }}
+{{ else }}
+	{{ exec "help" }}
+	{{ sendDM $embed }}
+{{ end }}
