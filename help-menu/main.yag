@@ -1,3 +1,9 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Command`
+	Trigger: `help`
+*/ -}}
+
 {{ $embed := (cembed
 	"title" ("Custom Help Commands")
 	"color" 14232643
@@ -33,7 +39,9 @@
 	(sdict "name" "Balance" "value" "Use the command `-bal` or `-balance` to displays your current balance!" "inline" false)
 	(sdict "name" "Money Transfers" "value" "Use the command `-pay <amt> <mention>` to pay the mentioned user the amount listed from your balance" "inline" false)
 	(sdict "name" "Net Worth" "value" "Use the command `-net` to display the net worth of the top 10 users!" "inline" false)
-	(sdict "name" "Finding Wallets" "value" "use the command `-find` to find wallets in the current channel, users will be notified when a wallet drops!" "inline" false)
+	(sdict "name" "Check Drops" "value" "Use the command `-chkDrops` to see if the channel has any wallet drops!" "inline" false)
+	(sdict "name" "Finding Wallets" "value" "Use the command `-find` to find wallets in the current channel, users will be notified when a wallet drops!" "inline" false)
+	(sdict "name" "Daily" "value" "Use the command `-daily` to get money for today! Can only be used once every 24 hours!
 ) }}
 {{ $fun := (cslice
 	(sdict "name" "Bot Access" "value" "You need the <@&904479893084078171> role to access the bot channels, you can get this in <#858187110897025094>!" "inline" false)
@@ -51,6 +59,7 @@
 	(sdict "name" "Onduty" "value" "Use the command `-onduty` to go onduty, you will be onduty for 5 hours, at the end of 5 hours you will be sent a DM telling you have been removed!" "inline" false)
 	(sdict "name" "Offduty" "value" "Use the command `-offduty` to go offduty if you need to go offline before the 5 hours are up!" "inline" false)
 	(sdict "name" "List" "value" "Use the command `-onduty list` to list Staff who are currently onduty" "inline" false)
+	(sdict "name" "Verify" "value" "Use the command `-verify @mention` to verify a user!" "inline" false)
 ) }}
 
 {{ if and .CmdArgs (eq .Cmd "-help") }}
