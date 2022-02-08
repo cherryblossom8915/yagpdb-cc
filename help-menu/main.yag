@@ -63,38 +63,43 @@
 ) }}
 
 {{ if and .CmdArgs (eq .Cmd "-help") }}
-	{{ $subCmd := index .CmdArgs 0 }}
-	{{if or (eq $subCmd "birthday") (eq $subCmd "Birthday") }}
+	{{ $subCmd := 0 }}
+	{{ if eq (len .CmdArgs) 1 }}
+		{{ $subCmd = (lower (index .CmdArgs 0)) }}
+	{{ else if eq (len .CmdArgs) 2 }}
+		{{ $subCmd = (lower (joinStr "" (index .CmdArgs 0) (index .CmdArgs 1))) }}
+	{{ end }}
+	{{if eq $subCmd "birthday" }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $bday
 		) }}
-	{{ else if or (eq $subCmd "rank") (eq $subCmd "Rank") }}
+	{{ else if eq $subCmd "rank" }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $rank
 		) }}
-	{{ else if or (eq $subCmd "count") (eq $subCmd "Count") }}
+	{{ else if eq $subCmd "count" }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $count
 		) }}
-	{{ else if or (eq $subCmd "currency") (eq $subCmd "Currency") }}
+	{{ else if eq $subCmd "currency" }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $eco
 		) }}
-	{{ else if or (eq $subCmd "fun") (eq $subCmd "Fun") }}
+	{{ else if eq $subCmd "fun" }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $fun
 		) }}
-	{{ else if or (eq $subCmd "staff") (eq $subCmd "Staff") }}
+	{{ else if eq $subCmd "staff" }}
 		{{ if (hasRoleID 874087456436265050) }}
 			{{ $embed = (cembed 
 			"title" ("Command List")
@@ -108,6 +113,8 @@
 			"description" "You do not have access to this command!"
 		) }}
 		{{ end }}
+	{{ else if (reFind `help|commands|h|how|command|info|invite|prefix|calc|c|calculate|currenttime|ctime|gettime|listroles|poll|undelete|ud|customcommands|cc|logs|log|whois|whoami|nicknames|nn|usernames|unames|un|resetpastnicknames|remindme|remind|reminder|reminders|creminders|channelreminders|delreminder|rmreminder|role|settimezone|setz|tzset|toggletimeconversion|toggleconv|ttc|define|df|weather|w|topic|catfact|cf|cat|catfacts|dogfact|dog|dogfacts|advice|throw|roll|customembed|ce|simpleembed|se|wouldyourather|wyr|xhcd|howlongtobeat|hltb|topservers|takerep|\-|tr|trep|\-rep|giverep|\+|gr|grep|\+rep|setrep|setrepid|delrep|replog|replogs|rep|toprep|sentiment|sent|8ball|soundboard|sb|soundboardreset|sbclose|sbreset|cah|cahcreate|cahc|cahend|cahkick|cahpacks|ping|viewperms|currentshard|cshard|isguildavailable|yagstatus|status|roledbg|ban|banid|unban|unbanid|kick|mute|unmute|report|clean|clear|cl|reason|warn|warnings|warns|editwarning|delwarning|dw|delwarn|deletewarning|clearwarnings|clw|topwarnings|topwarns|giverole|grole|arole|addrole|removerole|rrole|takerole|trole|automod|automodrulesets|automodr|automodlist|automodl|automodtoggle|automodt|automodlogs|automodlog|automodlistviolations|automodviolations|automodviolationlogs|automodvlogs|automodvlog|automodlistviolationscount|automodviolationscount|automodvcount||automoddeleteviolation|automoddelviolation|automoddelv|automoddv|automodclearviolations|automodclearv|automodclrviolations|automodclrv|rolemenu|rolemenucreate|rolemenuc|rolemenuremove|rolemenurm|rolemenuupdate|rolemenuu|rolemenuresetreactions|rolemenureset|rolemenueditoption|rolemenuedit|rolemenucomplete|rolemenufinish|rolemenulistgroups|rolemenulist|rolemenugroups|ticket|tickets|ticketsopen|ticketscreate|ticketsnew|ticketsmake|ticketsadduser|ticketsremoveuser|ticketsrename|ticketsclose|ticketsend|ticketsdelete|ticketsadminsonly|ticketsadminonly|ticketsao|events|event|eventscreate|eventsnew|eventsmake|eventsedit|eventslist|eventsls|eventsdelete|eventsrm|eventsdel|eventsstopsetup|eventscancelsetup` $subCmd) }}
+		{{ $embed = (index (exec (joinStr "" "help " $subCmd)) 0) }}
 	{{ else }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
