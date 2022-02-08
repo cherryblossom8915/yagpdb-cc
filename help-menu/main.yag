@@ -64,37 +64,37 @@
 
 {{ if and .CmdArgs (eq .Cmd "-help") }}
 	{{ $subCmd := index .CmdArgs 0 }}
-	{{if eq $subCmd "birthday"}}
+	{{if or (eq $subCmd "birthday") (eq $subCmd "Birthday") }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $bday
 		) }}
-	{{ else if eq $subCmd "rank" }}
+	{{ else if or (eq $subCmd "rank") (eq $subCmd "Rank") }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $rank
 		) }}
-	{{ else if eq $subCmd "count" }}
+	{{ else if or (eq $subCmd "count") (eq $subCmd "Count") }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $count
 		) }}
-	{{ else if eq $subCmd "currency" }}
+	{{ else if or (eq $subCmd "currency") (eq $subCmd "Currency") }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $eco
 		) }}
-	{{ else if eq $subCmd "fun" }}
+	{{ else if or (eq $subCmd "fun") (eq $subCmd "Fun") }}
 		{{ $embed = (cembed 
 			"title" ("Command List")
 			"color" 14232643
 			"fields" $fun
 		) }}
-	{{ else if eq $subCmd "staff" }}
+	{{ else if or (eq $subCmd "staff") (eq $subCmd "Staff") }}
 		{{ if (hasRoleID 874087456436265050) }}
 			{{ $embed = (cembed 
 			"title" ("Command List")
@@ -108,6 +108,12 @@
 			"description" "You do not have access to this command!"
 		) }}
 		{{ end }}
+	{{ else }}
+		{{ $embed = (cembed 
+			"title" ("Command List")
+			"color" 14232643
+			"description" "That command does not exist!"
+		) }}
 	{{ end }}
 	{{ sendMessage nil $embed }}
 	{{ deleteResponse 0 }}
