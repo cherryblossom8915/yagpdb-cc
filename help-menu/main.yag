@@ -41,7 +41,7 @@
 	(sdict "name" "Net Worth" "value" "Use the command `-net` to display the net worth of the top 10 users!" "inline" false)
 	(sdict "name" "Check Drops" "value" "Use the command `-chkDrops` to see if the channel has any wallet drops!" "inline" false)
 	(sdict "name" "Finding Wallets" "value" "Use the command `-find` to find wallets in the current channel, users will be notified when a wallet drops!" "inline" false)
-	(sdict "name" "Daily" "value" "Use the command `-daily` to get money for today! Can only be used once every 24 hours!
+	(sdict "name" "Daily" "value" "Use the command `-daily` to get money for today! Can only be used once every 24 hours!" "inline" false)
 ) }}
 {{ $fun := (cslice
 	(sdict "name" "Bot Access" "value" "You need the <@&904479893084078171> role to access the bot channels, you can get this in <#858187110897025094>!" "inline" false)
@@ -67,7 +67,7 @@
 	{{ if eq (len .CmdArgs) 1 }}
 		{{ $subCmd = (lower (index .CmdArgs 0)) }}
 	{{ else if eq (len .CmdArgs) 2 }}
-		{{ $subCmd = (lower (joinStr "" (index .CmdArgs 0) (index .CmdArgs 1))) }}
+		{{ $subCmd = (lower (joinStr " " (index .CmdArgs 0) (index .CmdArgs 1))) }}
 	{{ end }}
 	{{if eq $subCmd "birthday" }}
 		{{ $embed = (cembed 
@@ -113,14 +113,16 @@
 			"description" "You do not have access to this command!"
 		) }}
 		{{ end }}
-	{{ else if (reFind `help|commands|h|how|command|info|invite|prefix|calc|c|calculate|currenttime|ctime|gettime|listroles|poll|undelete|ud|customcommands|cc|logs|log|whois|whoami|nicknames|nn|usernames|unames|un|resetpastnicknames|remindme|remind|reminder|reminders|creminders|channelreminders|delreminder|rmreminder|role|settimezone|setz|tzset|toggletimeconversion|toggleconv|ttc|define|df|weather|w|topic|catfact|cf|cat|catfacts|dogfact|dog|dogfacts|advice|throw|roll|customembed|ce|simpleembed|se|wouldyourather|wyr|xhcd|howlongtobeat|hltb|topservers|takerep|\-|tr|trep|\-rep|giverep|\+|gr|grep|\+rep|setrep|setrepid|delrep|replog|replogs|rep|toprep|sentiment|sent|8ball|soundboard|sb|soundboardreset|sbclose|sbreset|cah|cahcreate|cahc|cahend|cahkick|cahpacks|ping|viewperms|currentshard|cshard|isguildavailable|yagstatus|status|roledbg|ban|banid|unban|unbanid|kick|mute|unmute|report|clean|clear|cl|reason|warn|warnings|warns|editwarning|delwarning|dw|delwarn|deletewarning|clearwarnings|clw|topwarnings|topwarns|giverole|grole|arole|addrole|removerole|rrole|takerole|trole|automod|automodrulesets|automodr|automodlist|automodl|automodtoggle|automodt|automodlogs|automodlog|automodlistviolations|automodviolations|automodviolationlogs|automodvlogs|automodvlog|automodlistviolationscount|automodviolationscount|automodvcount||automoddeleteviolation|automoddelviolation|automoddelv|automoddv|automodclearviolations|automodclearv|automodclrviolations|automodclrv|rolemenu|rolemenucreate|rolemenuc|rolemenuremove|rolemenurm|rolemenuupdate|rolemenuu|rolemenuresetreactions|rolemenureset|rolemenueditoption|rolemenuedit|rolemenucomplete|rolemenufinish|rolemenulistgroups|rolemenulist|rolemenugroups|ticket|tickets|ticketsopen|ticketscreate|ticketsnew|ticketsmake|ticketsadduser|ticketsremoveuser|ticketsrename|ticketsclose|ticketsend|ticketsdelete|ticketsadminsonly|ticketsadminonly|ticketsao|events|event|eventscreate|eventsnew|eventsmake|eventsedit|eventslist|eventsls|eventsdelete|eventsrm|eventsdel|eventsstopsetup|eventscancelsetup` $subCmd) }}
-		{{ $embed = (index (exec (joinStr "" "help " $subCmd)) 0) }}
-	{{ else }}
-		{{ $embed = (cembed 
-			"title" ("Command List")
-			"color" 14232643
-			"description" "That command does not exist!"
-		) }}
+	{{ else if $built := exec "help" $subCmd }}
+		{{ if eq (kindOf $built) "slice" }}
+			{{ $embed = (index (exec (joinStr " " "help" $subCmd)) 0) }}
+		{{ else }}
+			{{ $embed = (cembed 
+				"title" ("Command List")
+				"color" 14232643
+				"description" "That command does not exist!"
+			) }}
+		{{ end }}
 	{{ end }}
 	{{ sendMessage nil $embed }}
 	{{ deleteResponse 0 }}
