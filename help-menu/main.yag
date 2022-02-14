@@ -128,7 +128,7 @@
 	{{ deleteResponse 0 }}
 {{ else }}
 	{{ sendDM $embed }}
-		{{ $embed = (cembed 
+	{{ $embed = (cembed 
 		"title" ("Command List")
 		"color" 14232643
 		"description" "You've got mail!"
