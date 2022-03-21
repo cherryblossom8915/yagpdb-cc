@@ -4,9 +4,12 @@
 	Trigger: `\A`
 */ -}}
 
-{{ $chanID := (toInt64 .Message.ChannelID) }}
+{{/* CONFIGUARABLE VALUES */}}
+{{ $channel := 0 }}
 
-{{ if eq $channelID 911705028400656454 }}
+{{/* DON'T TOUCH */}}
+{{ $chanID := (toInt64 .Message.ChannelID) }}
+{{ if eq $chanID $channel }}
 	{{ $avatar := .User.AvatarURL "256" }}
 	{{ $user := or .Member.Nick .User.Username }}
 	{{ $embed := cembed
