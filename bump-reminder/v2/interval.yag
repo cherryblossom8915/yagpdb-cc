@@ -1,0 +1,45 @@
+{{- /*
+	Author: Chloe Cook (@cherry blossom)
+	Trigger type: `Minute interval`
+	Interval: `5`
+*/ -}}
+
+{{/* database call to get last bump time, gets set in other command */}}
+{{ $globalCategoryID := toInt (dbGet 0 "Global").Value }}
+{{ $lastBumpTime := (dbGet $globalCategoryID "Last Bump").Value }}
+{{ $now := currentTime }}
+
+{{/* configuration values for $reminderMessage */}}
+{{ $bumpBot := 735147814878969968 }} {{/* Bump Reminder ID */}}
+{{ $bumpRoleID := 0 }}
+{{ $bumpCooldownMinutes := 240 }} {{/* Bump Reminder will take care of the first reminder */}}
+{{ $url := "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png" }}
+{{ $author := (sdict "name" "It's time to bump!" "icon_url" $url) }}
+{{ $description := "It's time to bump the server, use /bump\n\nThe server multiplier has been reset!" }}
+{{ $footer := (sdict "text" (joinStr "" $now.Month " " $now.Day " " $now.Year " " ($now.Format "15:04") " UTC")) }}
+
+{{/* declaration of $reminderMessage using configuration values */}}
+{{ $embed := cembed
+	"author" $author
+	"description" $description
+	"footer" $footer
+}}
+{{ $reminderMessage := (complexMessage "content" (mentionRoleID $bumpRoleID) "embed" $embed) }}
+
+{{/* if there is a last bump time, run this */}}
+{{ if $lastBumpTime }}
+	{{ $minutesSinceBump := toInt ($now.Sub $lastBumpTime).Minutes }}
+	{{ if (ge $minutesSinceBump $bumpCooldownMinutes) }}
+		{{/* send a reminder every 2 hours starting at 4 hours */}}
+		{{ if lt (toInt (mod $minutesSinceBump 120)) 5 }}
+			{{ sendMessageNoEscape .Channel.ID $reminderMessage }}
+      {{/* Resets the multiplier */}}
+			{{ $r := dbSet $bumpBot "Multiplier" 0 }}
+		{{ end }}
+	{{ end }}
+{{/* if there is no last bump time, run this */}}
+{{ else }}
+	{{ sendMessageNoEscape .Channel.ID $reminderMessage }}
+  {{/* Resets the multiplier */}}
+	{{ $r := dbSet $bumpBot "Multiplier" 0 }}
+{{ end }}
