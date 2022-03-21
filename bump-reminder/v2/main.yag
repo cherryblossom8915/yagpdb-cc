@@ -1,1 +1,40 @@
 
+{{- /*
+	Author: Chloe Cook (@raspberry#5310)
+	Trigger type: `Reaction`
+	Trigger: `Added Reactions Only`
+*/ -}}
+
+{{/* CONFIGURABLE VALUES */}}
+{{ $bumpBot := 735147814878969968 }} {{/* Recommend Bump Reminder */}}
+{{ $chanID := 0 }} {{/* Channel ID where bump messages happen */}}
+
+{{/* DON'T TOUCH */}}
+{{ if and (eq .User.ID $bumpBot) (eq .Channel.ID $chanID) }}
+	{{/* database calls */}}
+	{{ $globalCategoryID := toInt (dbGet 0 "Global").Value }}
+	{{ $lastBumpTime := (dbGet $globalCategoryID "Last Bump").Value }}
+	{{/* configuration values */}}
+	{{ $bumpCooldownMinutes := 240 }}
+	{{ $user := .User.ID }}
+	{{ $now := currentTime }}
+	{{ dbSet $globalCategoryID "Last Bump" $now }}
+	{{ $r := 0 }}
+	{{ if not (dbGet $user "Multiplier").Value }}
+		{{ $r = dbSet $user "Multiplier" 1 }}
+	{{ else if gt (toInt (dbGet $user "Multiplier").Value) 100 }}
+		{{ $r = dbIncr $user "Multiplier" 0 }}
+	{{ else }}
+		{{ $r = dbIncr $user "Multiplier" 1 }}
+	{{ end }}
+	{{ $url := "https://cdn.discordapp.com/avatars/204255221017214977/2fa57b425415134d4f8b279174131ad6.png" }}
+	{{ $author := (sdict "name" "Thank you!" "icon_url" $url) }}
+	{{ $description := (joinStr "" "Thank you for bumping our server! We will remind you again in 2 hours! Server multiplier has increased to " (printf "%.2f" (mult 0.01 $r|add 1.0)) "!") }}
+	{{ $footer := (sdict "text" (joinStr "" $now.Month " " $now.Day " " $now.Year " " ($now.Format "15:04") " UTC")) }}
+	{{ $thankYouMessage := cembed
+		"author" $author
+		"description" $description
+		"footer" $footer
+	}}
+	{{ sendMessage nil $thankYouMessage }}
+{{ end }}
